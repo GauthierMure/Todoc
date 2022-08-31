@@ -2,6 +2,7 @@ package com.cleanup.todoc.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.factory.ProjectViewModelFactory;
 import com.cleanup.todoc.factory.TaskViewModelFactory;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.viewmodels.ProjectViewModel;
 import com.cleanup.todoc.viewmodels.TaskViewModel;
 
 import java.util.ArrayList;
@@ -40,11 +43,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
 
     private TaskViewModel taskViewModel;
+    private ProjectViewModel projectViewModel;
 
     /**
      * List of all projects available in the application
      */
-    private final Project[] allProjects = Project.getAllProjects();
+    private final List<Project> allProjects = new ArrayList<>();
 
     /**
      * List of all current tasks of the application
@@ -93,9 +97,19 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     // Suppress warning is safe because variable is initialized in onCreate
     private TextView lblNoTasks;
 
-    final Observer<List<Task>> observer = tasks1 -> {
+    final Observer<List<Task>> taskObserver = tasks1 -> {
         tasks = tasks1;
         updateTasks();
+    };
+
+    final Observer<List<Project>> projectObserver = projects -> {
+        Log.i("listProjects","size : "+projects.size());
+        if (projects.size() == 0){
+            projectViewModel.createProject(new Project(1L, "Projet Tartampion", 0xFFEADAD1));
+            projectViewModel.createProject(new Project(2L, "Projet Lucidia", 0xFFB4CDBA));
+            projectViewModel.createProject(new Project(3L, "Projet Circus", 0xFFA3CED2));
+        }
+        allProjects.addAll(projects);
     };
 
     @Override
@@ -109,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         configureViewModel();
         getTasks();
+        getProjects();
 
         adapter = new TasksAdapter(tasks,this);
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -319,11 +334,15 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     private void configureViewModel(){
         taskViewModel = new ViewModelProvider(this, TaskViewModelFactory.getInstance(this))
                 .get(TaskViewModel.class);
+        projectViewModel = new ViewModelProvider(this, ProjectViewModelFactory.getInstance(this))
+                .get(ProjectViewModel.class);
     }
 
     private void getTasks() {
-        taskViewModel.getListTask().observe(this, observer);
+        taskViewModel.getListTask().observe(this, taskObserver);
     }
 
-
+    private void getProjects() {
+        projectViewModel.getProjects().observe(this, projectObserver);
+    }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.cleanup.todoc.database.TaskDao;
+import com.cleanup.todoc.database.dao.TaskDao;
 import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.model.Task;
 
