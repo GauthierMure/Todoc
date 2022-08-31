@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.factory.TaskViewModelFactory;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.viewmodels.TaskViewModel;
@@ -336,7 +337,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     private void configureViewModel(){
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(this, TaskViewModelFactory.getInstance(this))
+                .get(TaskViewModel.class);
     }
 
     private void getTasks() {

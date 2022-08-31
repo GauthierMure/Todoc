@@ -1,5 +1,8 @@
 package com.cleanup.todoc.viewmodels;
 
+import android.app.Application;
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,10 +16,10 @@ import java.util.List;
 
 public class TaskViewModel extends ViewModel {
 
-    private TaskRepository taskSource;
+    private final TaskRepository taskSource;
 
-    public TaskViewModel(){
-        taskSource = injection.getTaskRepository();
+    public TaskViewModel(Context context){
+        taskSource = injection.getTaskRepository(context);
     }
 
     public List<Task> getListTask() {

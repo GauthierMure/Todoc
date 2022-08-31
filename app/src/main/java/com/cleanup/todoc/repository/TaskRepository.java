@@ -1,5 +1,9 @@
 package com.cleanup.todoc.repository;
 
+import android.content.Context;
+
+import com.cleanup.todoc.database.TaskDao;
+import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.model.Task;
 
 import java.util.ArrayList;
@@ -8,13 +12,12 @@ import java.util.List;
 public class TaskRepository {
 
     private List<Task> taskList;
+    private final TaskDao taskDao;
 
-    public TaskRepository (){
+    public TaskRepository (Context context){
         taskList = new ArrayList<>();
-    }
-
-    public static TaskRepository getInstance(){
-        return new TaskRepository();
+        TodocDatabase database = TodocDatabase.getInstance(context);
+        taskDao = database.taskDao();
     }
 
     public List<Task> getTaskList() {
