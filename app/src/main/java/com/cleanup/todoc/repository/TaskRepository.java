@@ -2,41 +2,39 @@ package com.cleanup.todoc.repository;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
 import com.cleanup.todoc.database.TaskDao;
 import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.model.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaskRepository {
 
-    private List<Task> taskList;
+    private LiveData<List<Task>> listTasks;
+
     private final TaskDao taskDao;
 
     public TaskRepository (Context context){
-        taskList = new ArrayList<>();
         TodocDatabase database = TodocDatabase.getInstance(context);
         taskDao = database.taskDao();
+        listTasks = taskDao.getTasks();
     }
 
-    public List<Task> getTaskList() {
-        return taskList;
-    }
-
-    public Task getTask(Long id) {
-        for (int i = 0; i < taskList.size(); i++){
-            if (taskList.get(i).getId() == id)
-                return taskList.get(i);
-        }
-        return null;
+    public LiveData<List<Task>> getTaskList() {
+        return listTasks;
     }
 
     public void createTask(Task task) {
-        taskList.add(task);
+        TodocDatabase.databaseWriteExecutor.execute(() ->
+                taskDao.createTask(task));
+        listTasks = taskDao.getTasks();
     }
 
     public void deleteTask(Task task) {
-        taskList.remove(task);
+        TodocDatabase.databaseWriteExecutor.execute(() ->
+                taskDao.deleteTask(task.getId()));
+        listTasks = taskDao.getTasks();
     }
 }

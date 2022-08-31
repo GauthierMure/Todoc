@@ -22,17 +22,8 @@ public class TaskViewModel extends ViewModel {
         taskSource = injection.getTaskRepository(context);
     }
 
-    public List<Task> getListTask() {
+    public LiveData<List<Task>> getListTask() {
         return taskSource.getTaskList();
-    }
-
-    public Task getTask(Long id) {
-        List<Task> listTasks = taskSource.getTaskList();
-        for (int i = 0; i < listTasks.size(); i++){
-            if (listTasks.get(i).getId() == id)
-                return listTasks.get(i);
-        }
-        return null;
     }
 
     public void createTask(Task task){
