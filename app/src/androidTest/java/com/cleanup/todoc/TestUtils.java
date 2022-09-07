@@ -1,16 +1,19 @@
 package com.cleanup.todoc;
 
-import android.support.annotation.IdRes;
-import android.support.test.espresso.PerformException;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.espresso.util.HumanReadables;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.PerformException;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.espresso.util.HumanReadables;
+
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Matchers;
+
 
 /**
  * Created by dannyroa on 5/9/15.
@@ -47,9 +50,7 @@ public class TestUtils {
         }
 
         public Matcher<View> getConstraints() {
-            return Matchers.allOf(new Matcher[]{
-                    ViewMatchers.isAssignableFrom(RecyclerView.class), ViewMatchers.isDisplayed()
-            });
+            return null;
         }
 
         public String getDescription() {
@@ -59,6 +60,7 @@ public class TestUtils {
                     + this.position;
         }
 
+        @Override
         public void perform(UiController uiController, View view) {
             RecyclerView recyclerView = (RecyclerView) view;
             (new ScrollToPositionViewAction(this.position)).perform(uiController, view);
@@ -91,9 +93,9 @@ public class TestUtils {
         }
 
         public Matcher<View> getConstraints() {
-            return Matchers.allOf(new Matcher[]{
+            return /*Matchers.allOf(new Matcher[]{
                     ViewMatchers.isAssignableFrom(RecyclerView.class), ViewMatchers.isDisplayed()
-            });
+            });*/ null;
         }
 
         public String getDescription() {
