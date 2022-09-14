@@ -1,4 +1,4 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.utils;
 
 import android.view.View;
 
@@ -7,12 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 
 import org.hamcrest.Matcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers;
 
 
 /**

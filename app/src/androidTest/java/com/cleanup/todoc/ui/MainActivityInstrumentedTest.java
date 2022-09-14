@@ -1,12 +1,5 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.ui;
 
-import android.view.View;
-import android.widget.TextView;
-
-import com.cleanup.todoc.ui.MainActivity;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -14,37 +7,54 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.cleanup.todoc.TestUtils.withRecyclerView;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static com.cleanup.todoc.utils.TestUtils.withRecyclerView;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
+
+import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.runner.AndroidJUnit4;
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @author Gaëtan HERFRAY
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
+import com.cleanup.todoc.R;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
 
-    TextView lblNoTask;
-    RecyclerView listTasks;
+
+    private static final Intent intent;
+
+    static {
+        intent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
+        intent.putExtra("isTest", true);
+
+    }
+
+    private MainActivity mainActivity;
+
+    @Rule
+    public final ActivityScenarioRule<MainActivity> rule = new ActivityScenarioRule<>(intent);
+
 
     @Test
     public void addAndRemoveTask() {
-        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
-        scenario.onActivity(activity -> {
-            lblNoTask = activity.findViewById(R.id.lbl_no_task);
-            listTasks = activity.findViewById(R.id.list_tasks);
-        });
+
+        rule.getScenario().onActivity(activity1 -> mainActivity = activity1);
+        TextView lblNoTask = mainActivity.findViewById(R.id.lbl_no_task);
+        RecyclerView listTasks = mainActivity.findViewById(R.id.list_tasks);
 
         onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("Tâche example"));
+        onView(withId(R.id.txt_task_name)).perform(replaceText("Tache example"));
         onView(withId(android.R.id.button1)).perform(click());
 
         // Check that lblTask is not displayed anymore
@@ -64,7 +74,8 @@ public class MainActivityInstrumentedTest {
 
     @Test
     public void sortTasks() {
-        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+
+        rule.getScenario().onActivity(activity1 -> mainActivity = activity1);
 
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("aaa Tâche example"));
