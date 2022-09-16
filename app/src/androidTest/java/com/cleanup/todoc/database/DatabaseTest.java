@@ -68,6 +68,7 @@ public class DatabaseTest {
 
     @Test
     public void should_insert_Task() throws InterruptedException {
+        this.database.projectDao().createProject(PROJECT);
         this.database.taskDao().createTask(TASK);
         List<Task> tasks = LiveDataTestUtils.getValue(this.database.taskDao().getTasks());
         Task task = tasks.get(0);
@@ -77,6 +78,7 @@ public class DatabaseTest {
 
     @Test
     public void should_delete_Task() throws InterruptedException {
+        this.database.projectDao().createProject(PROJECT);
         this.database.taskDao().createTask(TASK);
         List<Task> tasks = LiveDataTestUtils.getValue(this.database.taskDao().getTasks());
         Task task = tasks.get(0);
